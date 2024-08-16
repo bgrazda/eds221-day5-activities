@@ -1,0 +1,37 @@
+---
+title: "Runoff Volumes"
+author: "Brooke Grazda"
+date: "2024-08-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+```
+
+```{r}
+frac_vec <- seq(from = 0.6, to = 0.8, by =0.01)
+  
+runoff <- predict_runoff(frac_vec, 182)
+
+volume <- data.frame(frac_vec, runoff)
+
+stormyplot <- ggplot(volume, aes(x = frac_vec, y = runoff)) + geom_point() +
+  geom_line() +
+  labs(title = "Stormwater Runoff",
+       x = "Fraction of Impervious Watershed",
+       y = "Total Runoff Volume (cubic feet)") +
+  theme_minimal()
+
+stormyplot
+
+ggsave(here::here("figs", "stormyplot.png"))
+```
+
+```{r}
+
+```
+
+

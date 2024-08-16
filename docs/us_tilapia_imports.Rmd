@@ -1,0 +1,33 @@
+---
+title: "US Tilapia Imports"
+author: "Brooke Grazda"
+date: "2024-08-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+```
+```{r}
+us_tilapia_imports <- read_csv(here::here("data", "us_tilapia_imports.csv")) |> 
+  pivot_longer(cols = -country, names_to = "year", values_to = "imports") |> 
+  mutate(year = as.numeric(year)) 
+
+yearly_tilapia_tot <- us_tilapia_imports |> group_by(year) |> 
+  summarize(total_imports = sum(imports, na.rm = TRUE))
+
+yearly_tilapia <- ggplot(yearly_tilapia_tot, aes(x = year, y = total_imports)) +
+  geom_point() +
+  labs(x = "Year", y = "Individual", title = "US Tilapia Imports") +
+  theme_classic()
+
+yearly_tilapia
+
+ggsave(here::here("figs", "yearly_tilapia.png"))
+```
+
+
+
